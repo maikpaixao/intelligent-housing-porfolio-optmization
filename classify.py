@@ -4,22 +4,29 @@ import seaborn as sns
 import matplotlib
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
 from sklearn import preprocessing
-
-sns.set_theme(style="whitegrid")
 
 listings = pd.read_csv('data/simulated_listings.csv')
 target = pd.read_csv('data/target_apartments.csv')
+
 
 listings = listings[listings['sold']==1]
 #listings = listings[listings['rooms'] < 7]
 #listings = listings[listings['garages'] < 6]
 
-corrMatrix = listings.corr()
+x = listings.iloc[:, :5]
 
-matplotlib.rcParams.update({'font.size': 6})
-sns.heatmap(corrMatrix, annot=True)
-#sns.scatterplot(x=listings['time_on_market'], y=listings['value'])
-#sns.barplot(x=listings['rooms'], y=listings['time_on_market']) 
+'''
+min_max_scaler = preprocessing.MinMaxScaler()
+x_scaled = min_max_scaler.fit_transform(x)
 
-plt.show()
+x = pd.DataFrame(x_scaled)#.values
+print(x.head())
+'''
+#y = listings['value']
+y = listings['time_on_market']
+
+#reg = LinearRegression().fit(x, y)
+reg = RandomForestRegressor().fit(x, y)
+print(reg.score(x, y))
