@@ -21,7 +21,7 @@ listings = listings[cols]
 listings = listings[listings['rooms'] < 7]
 listings = listings[listings['garages'] < 6]
 
-x = listings.iloc[:, :5]
+x = listings.iloc[:, :6]
 
 '''
 min_max_scaler = preprocessing.MinMaxScaler()
@@ -30,14 +30,14 @@ x_scaled = min_max_scaler.fit_transform(x)
 x = pd.DataFrame(x_scaled)#.values
 print(x.head())
 '''
-#y = listings['value']
-y = listings['time_on_market']
+y = listings['value']
+#y = listings['time_on_market']
 
 #reg = LinearRegression().fit(x, y)
-reg = DecisionTreeRegressor().fit(x, y)
+reg = RandomForestRegressor().fit(x, y)
 print(reg.score(x, y))
 
-pred = reg.predict([[3.0,2.0,77,-23.6246294,-46.7387574]])
+pred = reg.predict([[2.0,1.0,72,-23.576523,-46.6444992, 1]])
 print(pred)
 
 # get importance
