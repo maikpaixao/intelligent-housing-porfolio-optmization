@@ -8,19 +8,21 @@ from sklearn import preprocessing
 from scipy import stats
 from mpl_toolkits.mplot3d import Axes3D
 
-sns.set_theme(style="whitegrid")
+class Utils:
+  def __init__(self):
+    self.target = pd.read_csv('data/target_apartments.csv')
+  
+  def get_importance(self, model):
+    # get importance
+    importance = model.feature_importances_
+    # summarize feature importance
+    #for i,v in enumerate(importance):
+    #  print('Variable: %0d, Score: %.5f' % (i,v))
+    return importance
 
-listings = pd.read_csv('../data/simulated_listings.csv')
-
-listings = listings[listings['sold']==0]
-listings = listings[listings['rooms'] < 7]
-listings = listings[listings['garages'] < 9]
-
-corrMatrix = listings.corr()
-
-matplotlib.rcParams.update({'font.size': 7})
-#sns.heatmap(corrMatrix, annot=True)
-#sns.scatterplot(x=listings['value'], y=listings['time_on_market'])
-#sns.barplot(x=listings['interior_quality'], y=listings['time_on_market']) 
-
-plt.show()
+  def gerar_receitas(self, model_p, model_t):
+    y = self.target['value'].values[0]
+    y_hat = model_p.predict(self.target.iloc[:10, :5])
+    y_tom = model_t.predict(self.target.iloc[:10, :5])
+    profit = (y_hat - y)/y_tom
+    return profit
