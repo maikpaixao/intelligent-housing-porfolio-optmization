@@ -21,7 +21,7 @@ listings = listings[cols]
 listings = listings[listings['rooms'] < 7]
 listings = listings[listings['garages'] < 6]
 
-x = listings.iloc[:, :6]
+x = listings.iloc[:, :5]
 
 '''
 min_max_scaler = preprocessing.MinMaxScaler()
@@ -36,6 +36,9 @@ y = listings['time_on_market']
 #reg = LinearRegression().fit(x, y)
 reg = DecisionTreeRegressor().fit(x, y)
 print(reg.score(x, y))
+
+pred = reg.predict([[3.0,2.0,77,-23.6246294,-46.7387574]])
+print(pred)
 
 # get importance
 importance = reg.feature_importances_
