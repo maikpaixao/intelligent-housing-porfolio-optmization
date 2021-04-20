@@ -40,8 +40,13 @@ model_p = RandomForestRegressor().fit(x, y_price)
 model_t = RandomForestRegressor().fit(x, y_tom)
 #print(reg.score(x, y_price))
 
-pred = utils.gerar_receitas(model_p, model_t)
-#print(pred)
+pred = utils.generate(model_p, model_t)
+print(pred.shape)
+
+#cumulative sum
+pred = pred[pred['value'].cumsum() <= 150000000]
+print(pred.shape)
+print(pred.head())
 
 importance = utils.get_importance(model_p)
 
