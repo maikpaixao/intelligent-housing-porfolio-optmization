@@ -9,7 +9,7 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn import preprocessing
 from src.utils import Utils
 
-utils = Utils()
+utils = Utils(filepath = 'data/target_apartments.csv')
 
 listings = pd.read_csv('data/simulated_listings.csv')
 target = pd.read_csv('data/target_apartments.csv')
@@ -49,9 +49,6 @@ print(pred.shape)
 print(pred.head())
 
 importance = utils.get_importance(model_p)
-
-#pred = reg.predict([[2.0,1.0,72,-23.576523,-46.6444992, 1]])
-#print(pred)
 
 #plot feature importance
 plt.bar([x for x in range(len(importance))], importance)

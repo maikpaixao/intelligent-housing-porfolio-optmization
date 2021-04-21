@@ -7,42 +7,31 @@ from sklearn.linear_model import LinearRegression
 from sklearn import preprocessing
 from scipy.stats import zscore
 from sklearn.preprocessing import StandardScaler
+from src.utils import Utils
 
+utils = Utils(filepath = 'data/target_apartments.csv')
 sns.set_theme(style="whitegrid")
 
 listings = pd.read_csv('data/simulated_listings.csv')
-target = pd.read_csv('data/target_apartments.csv')
-
+#listings.describe().to_csv("data_description.csv")
 print(listings.shape)
 
-#print(listings.describe())
+'''
+listings = utils.remove_outiliers(listings)
 
-#listings = listings[listings['sold']==1]
-#listings = listings[listings['rooms'] < 7]
-#listings = listings[listings['garages'] < 6]
-
-#Standartization
-#scaler = StandardScaler()
-#listings = scaler.fit_transform(listings)
-#listings = pd.DataFrame(listings)
-
-
-#remove outliers
-z_scores = zscore(listings)
-abs_z_scores = np.abs(z_scores)
-listings = listings[(abs_z_scores < 3).all(axis=1)]
-print(listings.shape)
-
-#listings = listings[listings['sold']==1]
+listings = listings[listings['sold']==1]
 
 #Correlation matrix
 corrMatrix = listings.corr()
 
 matplotlib.rcParams.update({'font.size': 7})
-sns.heatmap(corrMatrix, annot=True)
+#sns.heatmap(corrMatrix, annot=True)
 #sns.scatterplot(x=listings['interior_quality'], y=listings['interior_quality'])
-#sns.barplot(x=listings['interior_quality'], y=listings['time_on_market']) 
-print(listings.head())
-#sns.boxplot(x=listings['interior_quality'], y=listings['value'])
+#sns.barplot(x=listings['interior_quality'], y=listings['value']) 
 
-plt.show()
+utils.get_histograms(data = listings)
+
+#sns.histplot(x=listings['time_on_market'], kde=True, fill=False) 
+#sns.boxplot(x=listings['interior_quality'], y=listings['value'])
+#plt.show()
+'''
