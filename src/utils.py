@@ -11,6 +11,7 @@ from mpl_toolkits.mplot3d import Axes3D
 class Utils:
   def __init__(self, filepath):
     self.target = pd.read_csv(filepath)
+    sns.set_theme(style="whitegrid")
   
   def remove_outiliers(self, listings):
     Q1 = listings.quantile(0.25)
@@ -36,7 +37,13 @@ class Utils:
   def get_histograms(self, data):
     cols = data.columns
     for idx, col in enumerate(cols):
-      sns.histplot(x = data[col], kde=True)
+      sns.histplot(x = data[col], kde=False)
       plt.xlabel(col)
-      plt.savefig('saved/' + col + '.png', dpi=100)
+      plt.savefig('saved/histogram_' + col + '.png', dpi=100)
       
+  def get_heatmap(self, data):
+    corrMatrix = data.corr()
+    matplotlib.rcParams.update({'font.size': 7})
+    sns.heatmap(corrMatrix, annot=True)
+    plt.figure(figsize=(200,200))
+    plt.savefig('saved/heatmap.png', dpi=100)
