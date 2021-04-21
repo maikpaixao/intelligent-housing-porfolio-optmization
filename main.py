@@ -12,7 +12,6 @@ from src.utils import Utils
 utils = Utils(filepath = 'data/target_apartments.csv')
 listings = pd.read_csv('data/simulated_listings.csv')
 #listings.describe().to_csv("data_description.csv")
-print(listings.shape)
 
 listings = utils.remove_outiliers(listings)
 

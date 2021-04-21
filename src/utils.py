@@ -4,6 +4,10 @@ import seaborn as sns
 import matplotlib
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_validate
 from sklearn import preprocessing
 from scipy import stats
 from mpl_toolkits.mplot3d import Axes3D
@@ -12,6 +16,11 @@ class Utils:
   def __init__(self, filepath):
     self.target = pd.read_csv(filepath)
     sns.set_theme(style="whitegrid")
+  
+  def train(self, listings, target):
+    model = RandomForestRegressor(min_samples_split=2, random_state=2)
+    model.fit(listings, target)
+    return model
   
   def rearranje_cols(self, data, listings=False):
     if listings:
@@ -34,10 +43,9 @@ class Utils:
 
   def generate(self, model_p, model_t):
     self.target = self.rearranje_cols(self.target)
-    print(self.target.head())
     y = self.target['value'].values
     y_hat = model_p.predict(self.target.iloc[:, :6])
-    y_tom = model_t.predict(self.target.iloc[:, :6])
+    y_tom = model_t.predict(self.target.iloc[:, :7])
 
     profit = (y_hat - y)/y_tom
 

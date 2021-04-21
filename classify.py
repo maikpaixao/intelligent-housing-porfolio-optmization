@@ -15,32 +15,23 @@ listings = pd.read_csv('data/simulated_listings.csv')
 target = pd.read_csv('data/target_apartments.csv')
 
 listings = utils.rearranje_cols(listings, listings=True)
-listings = utils.remove_outiliers(listings)
+#listings = utils.remove_outiliers(listings)
 
+#listings = listings[listings['rooms'] < 7]
+#listings = listings[listings['garages'] < 6]
+
+model_p = utils.train(listings.iloc[:, :6], listings['value'])
+print(model_p.score(listings.iloc[:, :6], listings['value']))
 
 listings = listings[listings['sold']==1]
-listings = listings[listings['rooms'] < 7]
-listings = listings[listings['garages'] < 6]
-
-x = listings.iloc[:, :6]
-
-y_price = listings['value']
-y_tom = listings['time_on_market']
-
-model_p = RandomForestRegressor().fit(x, y_price)
-model_t = RandomForestRegressor().fit(x, y_tom)
-
-print(model_p.score(x, y_price), model_t.score(x, y_tom))
-
-pred = utils.generate(model_p, model_t)
+model_t = utils.train(listings.iloc[:, :7], listings['time_on_market'])
+print(model_t.score(listings.iloc[:, :7], listings['time_on_market']))
 
 #cumulative sum
+pred = utils.generate(model_p, model_t)
 pred = pred[pred['value'].cumsum() <= 150000000]
-print(pred.shape)
-print(pred.head())
-
-importance = utils.get_importance(model_p)
 
 #plot feature importance
+importance = utils.get_importance(model_p)
 plt.bar([x for x in range(len(importance))], importance)
 plt.show()
