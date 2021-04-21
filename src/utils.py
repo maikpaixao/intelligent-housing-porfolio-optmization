@@ -11,6 +11,7 @@ from sklearn.model_selection import cross_validate
 from sklearn import preprocessing
 from scipy import stats
 from mpl_toolkits.mplot3d import Axes3D
+import pickle
 
 class Utils:
   def __init__(self, filepath):
@@ -20,6 +21,8 @@ class Utils:
   def train(self, listings, target):
     model = RandomForestRegressor(min_samples_split=2, random_state=2)
     model.fit(listings, target)
+    with open('./models/'+ str(target.name) +'.pkl', 'wb') as file:
+      pickle.dump(model, file)
     return model
   
   def rearranje_cols(self, data, listings=False):
@@ -61,7 +64,8 @@ class Utils:
       plt.savefig('saved/histogram_' + col + '.png', dpi=100)
       
   def get_heatmap(self, data):
-    corrMatrix = data.corr()
+    corrMatrix = data.iloc[:, :-1].corr()
     matplotlib.rcParams.update({'font.size': 7})
     sns.heatmap(corrMatrix, annot=True)
-    plt.savefig('saved/heatmap.png', dpi=100)
+    #plt.show()
+    plt.savefig('saved/heatmap.png', pad_inches=10)

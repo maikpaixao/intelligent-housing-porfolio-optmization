@@ -14,16 +14,34 @@ listings = pd.read_csv('data/simulated_listings.csv')
 #listings.describe().to_csv("data_description.csv")
 
 listings = utils.remove_outiliers(listings)
+listings = listings[listings['sold']==1]
 
-#listings = listings[listings['sold']==1]
+print(listings['value'].shape)
+print(listings['time_on_market'].shape)
 
-#sns.scatterplot(x=listings['interior_quality'], y=listings['interior_quality'])
-#sns.barplot(x=listings['interior_quality'], y=listings['value']) 
+#model = LinearRegression()
+#model.fit(np.array(listings['value']).reshape(-1, 1), listings['time_on_market'])
+#print('Coefficients: ', model.coef_)
+
+'''
+# Plot outputs
+plt.scatter(listings['value'], listings['time_on_market'],  color='black')
+#plt.plot(diabetes_X_test, diabetes_y_pred, color='blue', linewidth=3)
+
+plt.xticks(())
+plt.yticks(())
+
+plt.show()
+'''
+
+#sns.scatterplot(x=listings['value'], y=listings['time_on_market'])
+#sns.lineplot(x=listings['time_on_market'], y=listings['value'])
+#sns.barplot(x=listings['useful_area'], y=listings['value']) 
 
 #utils.get_histograms(data = listings)
 #utils.get_heatmap(data = listings)
 
-#sns.histplot(x=listings['time_on_market'], kde=True, fill=False) 
+sns.scatterplot(x=listings['useful_area'], y=listings['value']) 
 #sns.boxplot(x=listings['interior_quality'], y=listings['value'])
 
-#plt.show()
+plt.show()
