@@ -13,6 +13,15 @@ class Utils:
     self.target = pd.read_csv(filepath)
     sns.set_theme(style="whitegrid")
   
+  def rearranje_cols(self, data, listings=False):
+    if listings:
+      cols = data.columns.tolist()
+      cols = cols[:5] + [cols[6]]  + [cols[5]] + cols[7:]
+    else:
+      cols = data.columns.tolist()
+      cols = cols[:5] + [cols[6]]  + [cols[5]]
+    return data[cols]
+  
   def remove_outiliers(self, listings):
     Q1 = listings.quantile(0.25)
     Q3 = listings.quantile(0.75)
@@ -24,9 +33,11 @@ class Utils:
     return importance
 
   def generate(self, model_p, model_t):
-    y = self.target['value'].values[0]
-    y_hat = model_p.predict(self.target.iloc[:, :5])
-    y_tom = model_t.predict(self.target.iloc[:, :5])
+    self.target = self.rearranje_cols(self.target)
+    print(self.target.head())
+    y = self.target['value'].values
+    y_hat = model_p.predict(self.target.iloc[:, :6])
+    y_tom = model_t.predict(self.target.iloc[:, :6])
 
     profit = (y_hat - y)/y_tom
 
@@ -45,5 +56,4 @@ class Utils:
     corrMatrix = data.corr()
     matplotlib.rcParams.update({'font.size': 7})
     sns.heatmap(corrMatrix, annot=True)
-    plt.figure(figsize=(200,200))
     plt.savefig('saved/heatmap.png', dpi=100)

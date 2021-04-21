@@ -14,7 +14,6 @@ listings = pd.read_csv('data/simulated_listings.csv')
 #listings.describe().to_csv("data_description.csv")
 print(listings.shape)
 
-
 listings = utils.remove_outiliers(listings)
 
 #listings = listings[listings['sold']==1]
@@ -23,7 +22,7 @@ listings = utils.remove_outiliers(listings)
 #sns.barplot(x=listings['interior_quality'], y=listings['value']) 
 
 #utils.get_histograms(data = listings)
-utils.get_heatmap(data = listings)
+#utils.get_heatmap(data = listings)
 
 #sns.histplot(x=listings['time_on_market'], kde=True, fill=False) 
 #sns.boxplot(x=listings['interior_quality'], y=listings['value'])
