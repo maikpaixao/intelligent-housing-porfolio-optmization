@@ -41,7 +41,7 @@ plt.show()
 #utils.get_histograms(data = listings)
 #utils.get_heatmap(data = listings)
 
-sns.scatterplot(x=listings['useful_area'], y=listings['value']) 
+sns.barplot(x=listings['interior_quality'], y=listings['value']) 
 #sns.boxplot(x=listings['interior_quality'], y=listings['value'])
 
 plt.show()
