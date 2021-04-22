@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.tree import DecisionTreeRegressor
+from xgboost import XGBRegressor
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import cross_validate
 from sklearn import preprocessing
@@ -19,7 +20,8 @@ class Utils:
     sns.set_theme(style="whitegrid")
   
   def train(self, listings, target):
-    model = RandomForestRegressor(min_samples_split=2, random_state=2)
+    model = RandomForestRegressor(random_state=2)
+    #model = DecisionTreeRegressor(criterion='mse', random_state=2)
     model.fit(listings, target)
     with open('./models/'+ str(target.name) +'.pkl', 'wb') as file:
       pickle.dump(model, file)
@@ -52,8 +54,10 @@ class Utils:
 
     profit = (y_hat - y)/y_tom
 
+    self.target['sell_value'] = y_hat
     self.target['profit'] = profit
     self.profits_data = self.target.sort_values(by=['profit'], ascending=False)
+
     return self.profits_data
   
   def get_histograms(self, data):
@@ -67,5 +71,4 @@ class Utils:
     corrMatrix = data.iloc[:, :-1].corr()
     matplotlib.rcParams.update({'font.size': 7})
     sns.heatmap(corrMatrix, annot=True)
-    #plt.show()
-    plt.savefig('saved/heatmap.png', pad_inches=10)
+    #plt.savefig('saved/heatmap.png', pad_inches=10)

@@ -18,7 +18,18 @@ pred = pred[pred['value'].cumsum() <= 150000000]
 
 print(pred.shape)
 
+pred = pred[pred['interior_quality'] == 1]
+print(pred.shape)
+pred['interior_quality'] = 3
+
+pd = model_p.predict(pred.iloc[:, :6])
+pred['sell_value_after'] = pd
+
+pred = pred[pred['sell_value_after'] > pred['sell_value']]
+print(pred.head())
+print(pred.shape)
+
 #plot feature importance
-importance = utils.get_importance(model_p)
-plt.bar([x for x in range(len(importance))], importance)
-plt.show()
+#importance = utils.get_importance(model_p)
+#plt.bar([x for x in range(len(importance))], importance)
+#plt.show()

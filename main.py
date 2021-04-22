@@ -13,15 +13,16 @@ utils = Utils(filepath = 'data/target_apartments.csv')
 listings = pd.read_csv('data/simulated_listings.csv')
 #listings.describe().to_csv("data_description.csv")
 
-listings = utils.remove_outiliers(listings)
+#listings = listings[listings['rooms'] < 7]
+#listings = listings[listings['garages'] < 6]
+
 listings = listings[listings['sold']==1]
+listings = utils.remove_outiliers(listings)
 
-print(listings['value'].shape)
-print(listings['time_on_market'].shape)
-
-#model = LinearRegression()
-#model.fit(np.array(listings['value']).reshape(-1, 1), listings['time_on_market'])
-#print('Coefficients: ', model.coef_)
+model = LinearRegression()
+model.fit(np.array(listings['value']).reshape(-1, 1), listings['time_on_market'])
+m = model.coef_
+b = model.intercept_
 
 '''
 # Plot outputs
@@ -41,7 +42,10 @@ plt.show()
 #utils.get_histograms(data = listings)
 #utils.get_heatmap(data = listings)
 
-sns.barplot(x=listings['interior_quality'], y=listings['value']) 
+sns.scatterplot(x=listings['value'], y=listings['time_on_market']) 
+#m, b = np.polyfit(listings['value'], listings['time_on_market'], 1)
+plt.plot(listings['value'], m*listings['value'] + b)
+#sns.regplot(x=listings['value'], y=listings['time_on_market'], lowess=True)
 #sns.boxplot(x=listings['interior_quality'], y=listings['value'])
 
 plt.show()
