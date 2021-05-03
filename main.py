@@ -3,17 +3,16 @@ import numpy as np
 import seaborn as sns
 import matplotlib
 import matplotlib.pyplot as plt
-from sklearn.linear_model import LinearRegression
+from sklearn import linear_model
 from sklearn import preprocessing
 from scipy.stats import zscore
 from sklearn.preprocessing import StandardScaler
 from src.utils import Utils
+from scipy import stats
 
 utils = Utils(filepath = 'data/target_apartments.csv')
 listings = pd.read_csv('data/simulated_listings.csv')
-listings = listings.iloc[2:5, :]
-
-print(listings.head())
+#listings = listings.iloc[:1000, :]
 
 def ls(value):
   solds = listings[listings['sold']==1]
@@ -25,17 +24,20 @@ def ls(value):
 
 #listings.describe().to_csv("data_description.csv")
 
+#Use DOM's as time series
+'''
 #idx = listings['time_on_market'].date_range("2018-01-01", periods=5, freq="D")
 listings_cpy = listings.copy()
 listings_cpy['time_on_market'] = listings_cpy['time_on_market'].apply(int).apply(range).apply(list)
 
 tm = listings_cpy.explode(column='time_on_market').reset_index()
 tm['sold'] = tm['time_on_market'].apply(ls)
+'''
 
 #listings.loc[listings.index.repeat(tm)]
 
 #print(listings['time_on_market'][0])
-print(tm.loc[32])
+#print(tm.loc[32])
 #print(listings['time_on_market'].explode().reset_index().loc[74])
 
 #listings = listings[listings['rooms'] < 7]
@@ -70,9 +72,32 @@ plt.show()
 
 sns.scatterplot(x=listings['value'], y=listings['time_on_market']) 
 #m, b = np.polyfit(listings['value'], listings['time_on_market'], 1)
+
 plt.plot(listings['value'], m*listings['value'] + b)
+
 #sns.regplot(x=listings['value'], y=listings['time_on_market'], lowess=True)
 #sns.boxplot(x=listings['interior_quality'], y=listings['value'])
 
 plt.show()
 '''
+listings = utils.remove_outiliers(listings)
+listings = listings[listings['sold']==1]
+
+listings['value'], _ = stats.boxcox(listings['value'])
+#listings['time_on_market'], _ = stats.boxcox(listings['time_on_market'])
+
+#listings['value'] = listings['value'].apply(np.log)
+#listings['time_on_market'] = listings['time_on_market'].apply(np.log)
+
+
+model = linear_model.LinearRegression(normalize=True)
+model.fit(np.array(listings['value']).reshape(-1, 1), listings['time_on_market'])
+m = model.coef_
+b = model.intercept_
+
+plt.scatter(listings['value'], listings['time_on_market'],  color='black')
+plt.plot(listings['value'], m*listings['value'] + b)
+
+
+#sns.histplot(data=listings, x="time_on_market")
+plt.show()

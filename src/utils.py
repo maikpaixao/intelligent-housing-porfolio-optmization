@@ -40,7 +40,7 @@ class Utils:
     Q1 = listings.quantile(0.25)
     Q3 = listings.quantile(0.75)
     IQR = Q3 - Q1
-    return listings[~((listings < (Q1 - 1.5 * IQR)) | (listings > (Q3 + 1.5 * IQR))).any(axis=1)]
+    return listings[~((listings < (Q1 - 1.4 * IQR)) | (listings > (Q3 + 1.4 * IQR))).any(axis=1)]
   
   def get_importance(self, model):
     importance = model.feature_importances_
