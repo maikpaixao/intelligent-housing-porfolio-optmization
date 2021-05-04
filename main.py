@@ -12,28 +12,53 @@ from scipy import stats
 
 utils = Utils(filepath = 'data/target_apartments.csv')
 listings = pd.read_csv('data/simulated_listings.csv')
-#listings = listings.iloc[:1000, :]
+listings = listings.iloc[:10, :]
 
 def ls(value):
+  #idx_1 = listings[listings['sold']==1].index
+  #idx_2 = tm[tm['sold']==1].index
+  #print(len(idx_1), len(idx_2))
+
+  #solds = tm[tm.iloc[:, 0] == idx_1[0]]
   solds = listings[listings['sold']==1]
+  idx = solds.index
   lst = solds['time_on_market'].apply(int).values
+  
+  value = value + 1 
   if value in lst:
-    return 1
+    return int(1)
   else:
-    return 0
+    return int(0)
 
 #listings.describe().to_csv("data_description.csv")
 
 #Use DOM's as time series
-
-#idx = listings['time_on_market'].date_range("2018-01-01", periods=5, freq="D")
 listings_cpy = listings.copy()
 listings_cpy['time_on_market'] = listings_cpy['time_on_market'].apply(int).apply(range).apply(list)
 
-tm = listings_cpy.explode(column='time_on_market').reset_index()
-tm['sold'] = tm['time_on_market'].apply(ls)
+tm = listings_cpy.explode(column='time_on_market')#.reset_index()
+#tm['sold'] = tm['time_on_market'].apply(ls)
+tm_positive = tm[tm['sold']==1]
+tm_idx = tm_positive.index
+tm['sold'] = 0
 
-print(tm.head())
+listing_positive = listings[listings['sold']==1]
+listing_idx = listing_positive.index
+listing_idx = list(listing_idx)
+
+'''
+for idx in listing_positive:
+  test = tm.loc[idx]
+  test = test.iloc[-1,:]
+  test['sold'] = 1
+  print(test)
+'''
+
+#print(tm.loc[listing_idx[0]].iloc[-1, :])
+
+
+print('Finsihed')
+tm.to_csv('tranformed_data.csv')
 
 
 #listings.loc[listings.index.repeat(tm)]
