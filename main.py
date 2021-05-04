@@ -25,14 +25,16 @@ def ls(value):
 #listings.describe().to_csv("data_description.csv")
 
 #Use DOM's as time series
-'''
+
 #idx = listings['time_on_market'].date_range("2018-01-01", periods=5, freq="D")
 listings_cpy = listings.copy()
 listings_cpy['time_on_market'] = listings_cpy['time_on_market'].apply(int).apply(range).apply(list)
 
 tm = listings_cpy.explode(column='time_on_market').reset_index()
 tm['sold'] = tm['time_on_market'].apply(ls)
-'''
+
+print(tm.head())
+
 
 #listings.loc[listings.index.repeat(tm)]
 
@@ -80,6 +82,9 @@ plt.plot(listings['value'], m*listings['value'] + b)
 
 plt.show()
 '''
+#SECOND PART
+
+'''
 listings = utils.remove_outiliers(listings)
 listings = listings[listings['sold']==1]
 
@@ -101,3 +106,4 @@ plt.plot(listings['value'], m*listings['value'] + b)
 
 #sns.histplot(data=listings, x="time_on_market")
 plt.show()
+'''
