@@ -9,26 +9,12 @@ from scipy.stats import zscore
 from sklearn.preprocessing import StandardScaler
 from src.utils import Utils
 from scipy import stats
+import warnings
+warnings.filterwarnings("ignore")
 
 utils = Utils(filepath = 'data/target_apartments.csv')
 listings = pd.read_csv('data/simulated_listings.csv')
-listings = listings.iloc[:10, :]
-
-def ls(value):
-  #idx_1 = listings[listings['sold']==1].index
-  #idx_2 = tm[tm['sold']==1].index
-  #print(len(idx_1), len(idx_2))
-
-  #solds = tm[tm.iloc[:, 0] == idx_1[0]]
-  solds = listings[listings['sold']==1]
-  idx = solds.index
-  lst = solds['time_on_market'].apply(int).values
-  
-  value = value + 1 
-  if value in lst:
-    return int(1)
-  else:
-    return int(0)
+listings = listings.iloc[:50, :]
 
 #listings.describe().to_csv("data_description.csv")
 
@@ -46,26 +32,13 @@ listing_positive = listings[listings['sold']==1]
 listing_idx = listing_positive.index
 listing_idx = list(listing_idx)
 
-'''
-for idx in listing_positive:
-  test = tm.loc[idx]
-  test = test.iloc[-1,:]
-  test['sold'] = 1
-  print(test)
-'''
+print(listing_idx)
 
-#print(tm.loc[listing_idx[0]].iloc[-1, :])
+for idx in listing_idx:
+  tm.loc[idx]['sold'].iloc[-1] = 1
 
-
-print('Finsihed')
-tm.to_csv('tranformed_data.csv')
-
-
-#listings.loc[listings.index.repeat(tm)]
-
-#print(listings['time_on_market'][0])
-#print(tm.loc[32])
-#print(listings['time_on_market'].explode().reset_index().loc[74])
+#print('Finsihed')
+#tm.to_csv('tranformed_data.csv')
 
 #listings = listings[listings['rooms'] < 7]
 #listings = listings[listings['garages'] < 6]
@@ -132,3 +105,6 @@ plt.plot(listings['value'], m*listings['value'] + b)
 #sns.histplot(data=listings, x="time_on_market")
 plt.show()
 '''
+
+sns.histplot(data=listings, x="time_on_market")
+plt.show()
