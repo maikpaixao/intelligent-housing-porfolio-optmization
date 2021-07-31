@@ -18,11 +18,30 @@ class Utils:
   def __init__(self, filepath):
     self.target = pd.read_csv(filepath)
     sns.set_theme(style="whitegrid")
-  
+
+  def transform_tom(self, listings):
+    listings_cpy = listings.copy()
+    listings_cpy['time_on_market'] = listings_cpy['time_on_market'].apply(int).apply(range).apply(list)
+
+    tm = listings_cpy.explode(column='time_on_market')#.reset_index()
+    #tm['sold'] = tm['time_on_market'].apply(ls)
+
+    tm_positive = tm[tm['sold']==1]
+    tm_idx = tm_positive.index
+    tm['sold'] = 0
+
+    listing_positive = listings[listings['sold']==1]
+    listing_idx = listing_positive.index
+    listing_idx = list(listing_idx)
+
+    for idx in listing_idx:
+      tm.loc[idx]['sold'].iloc[-1] = 1
+    return tm
+
   def train(self, listings, target):
     model = RandomForestRegressor(random_state=2)
-    #model = DecisionTreeRegressor(criterion='mse', random_state=2)
     model.fit(listings, target)
+
     with open('./models/'+ str(target.name) +'.pkl', 'wb') as file:
       pickle.dump(model, file)
     return model
@@ -71,4 +90,4 @@ class Utils:
     corrMatrix = data.iloc[:, :-1].corr()
     matplotlib.rcParams.update({'font.size': 7})
     sns.heatmap(corrMatrix, annot=True)
-    #plt.savefig('saved/heatmap.png', pad_inches=10)
+    plt.savefig('saved/heatmap.png', pad_inches=10)
