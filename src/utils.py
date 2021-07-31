@@ -36,7 +36,8 @@ class Utils:
 
     for idx in listing_idx:
       tm.loc[idx]['sold'].iloc[-1] = 1
-    return tm
+
+    tm.to_csv('./transformed_data.csv')
 
   def train(self, listings, target):
     model = RandomForestRegressor(random_state=2)
@@ -65,7 +66,7 @@ class Utils:
     importance = model.feature_importances_
     return importance
 
-  def generate(self, model_p, model_t):
+  def generate_profits(self, model_p, model_t):
     self.target = self.rearranje_cols(self.target)
     y = self.target['value'].values
     y_hat = model_p.predict(self.target.iloc[:, :6])

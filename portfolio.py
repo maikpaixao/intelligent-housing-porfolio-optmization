@@ -4,33 +4,21 @@ import seaborn as sns
 import matplotlib
 import matplotlib.pyplot as plt
 
-if __name__ == '__main__':
-  utils = Utils(filepath = 'data/target_apartments.csv')
-
+def load_models():
   with open('./models/value.pkl', 'rb') as file:
     model_p = pickle.load(file)
 
   with open('./models/time_on_market.pkl', 'rb') as file:
     model_t = pickle.load(file)
+  
+  return model_p, model_t
 
-  #cumulative sum
-  pred = utils.generate(model_p, model_t)
-  pred = pred[pred['value'].cumsum() <= 150000000]
+if __name__ == '__main__':
+  utils = Utils(filepath = 'data/target_apartments.csv')
+  model_p, model_t = load_models()
 
-  print(pred.shape)
+  pred = utils.generate_profits(model_p, model_t)
+  pred = pred[pred['value'].cumsum() <= 100000000]
 
-  pred = pred[pred['interior_quality'] == 1]
-  print(pred.shape)
-  pred['interior_quality'] = 3
-
-  pd = model_p.predict(pred.iloc[:, :6])
-  pred['sell_value_after'] = pd
-
-  pred = pred[pred['sell_value_after'] > pred['sell_value']]
-  print(pred.head())
-  print(pred.shape)
-
-  #plot feature importance
-  #importance = utils.get_importance(model_p)
-  #plt.bar([x for x in range(len(importance))], importance)
-  #plt.show()
+  pred.to_csv('./optimized_portfolio.csv')
+  

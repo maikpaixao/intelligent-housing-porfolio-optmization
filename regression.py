@@ -30,3 +30,4 @@ if __name__ == '__main__':
   plt.scatter(listings['value'], listings['time_on_market'],  color='black')
   plt.plot(listings['value'], m*listings['value'] + b)
   plt.show()
+  
