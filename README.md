@@ -19,8 +19,8 @@ python regression.py
 <img src='https://i.imgur.com/AQjBUMy.png' width=900/>
 
 <p float="left">
-<img src='https://i.imgur.com/DJnaCCV.png' width=450/>
-<img src='https://user-images.githubusercontent.com/12498735/127746861-34de68f0-d72a-4bff-bffe-6415a499b024.png' width=450/>
+<img src='https://i.imgur.com/DJnaCCV.png' width=400/>
+<img src='https://user-images.githubusercontent.com/12498735/127746861-34de68f0-d72a-4bff-bffe-6415a499b024.png' width=400/>
 </p>
 
 ### Training
